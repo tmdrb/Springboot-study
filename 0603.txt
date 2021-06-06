@@ -1,0 +1,80 @@
+post 요청은 body에 데이터를 저장해서 요청한다.
+
+MIME 타입
+<form>
+<input> 
+</form>   -> 이렇게 요청하는 방식이 x-www.form.urlencoded 방식
+
+json 타입으로 보내면 @requestbody Member m 라고 하면 
+MessageConveter(스프링 부트)가 매핑을 시켜서 데이터를 전달받는다.
+
+gradle 사용 이유 -> 라이브러리 관리 편하고 , 다른환경으로 이식 용이
+왜? 그냥 중앙저장소에 모여잇는 라이브러리 파일들을 setting에서 불러오기만 하면 되니까 자동으로 빌드까지 
+
+lombok -> builder 패턴 쉽게 만들어준다. 생성자는 데이터 순서를 지켜야 하는데 builder은 순서 상관 없다. 
+또한 원하는 값만 넣을수 있다.
+
+db에서 들고온 값을 저장하는 객체는 값이 바뀌면 안되니까 final로 변수 생성
+
+yml? -? spring 설정 (port,ip,db 등) -> key와 value 값 사이에는 반드시 공백이 필요하다.
+들여쓰기 규칙은 공백 2칸
+
+root context.xml -> 한번만 new 하는 애들 싱글톤 패턴
+
+servlet context.xml -> 여러번 new 하는 애들 
+
+static 폴더에서 찾는다 .jsp 는 동적파일이여서 못 찾는다 따로폴더를 만들어줘야한다. 
+
+node js 다운후 react 설치
+
+포트번호가 달라서 spring boot 와 cors 문제가 발생 해서 node json 파일에 가서 8080포트로 지정
+
+
+
+
+0604
+
+@GeneratedValue(strategy = GenerationType.IDENTITY) //프로젝트에서 연결된 db의 넘버링을 따라간다.
+
+Enum 을 쓰는게 좋다.  권한에 따라 행동을 다르게 할 수 있다. 
+그래서 이 권한을 String 을 이용하게 되면  다른 값들이 들어 갈 수도있다.
+enum을 쓰면 내가 지정한 값(manager, admin, user) 중 하나만 들어가게 된다.
+
+hibernate => 자바객체를 관계형데이터베이스로 매핑
+  ddl-auto : [create,update,none,] ->create : 테이블을 새로 만든다 프로젝트를 실행할때마다
+				         최초에만 create라고 하고 update라고 바꿔야 기존데이터를 유지할수 있따.
+
+
+spring boot 에서 mongodb 접근법
+1.mongoTemplate
+2.mongoRepository<T,ID>
+
+controller 에서 파라미터로 @request dto 객체를 받은 경우 mapping에서 null을 받는이유 :
+mapping 되는 원리는 dto 객체에 있는 getter를 가지고 매핑을 하는데 
+lombok을 사용하는 경우 get 뒤에 오는 변수의 첫번째 글자만 대문자로 만들어서 기존의 변수명과 다르다
+
+get뒤에 오는 첫번째만 대문자로 함수를 만드는데 lombok은 아닌듯
+
+ex)  private String aCount;
+     
+    intellij getter -> public String getaCount() -> 이렇게 해야 message convter가 json값을 dto 객체로 매핑시켜준다.
+    lombok getter -> public String getACount() -> 이래서 변수명과 달라져서 매핑 오류
+
+또한 lombok 는ㄴ gradle 로 추가하는것이 안되고 직접 다운로드 받아서 jar실행시켜야 한다.
+
+Enable annotation processing은 lombok을 사용하는 프로젝트마다 설정해주어야 한다.
+
+bulid gradle 에 
+compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+추가했더니 작동
+
+06.06
+mongotemplate -> query랑 update를 이용 해서 
+
+mongorepository -> 상속을 받아 interface를 만들고 query랑 Criteria없이 메소드로만 동작
+
+todo - mongodb 연동 확인(service 이용해서 insert,update, delete)
+       - 
+
+
