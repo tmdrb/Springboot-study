@@ -1,12 +1,9 @@
 package com.google.tmdrb.testblog.controller;
 
 
+import com.google.tmdrb.testblog.model.Board;
 import com.google.tmdrb.testblog.model.MUser;
 
-import com.google.tmdrb.testblog.repository.UserRepo;
-import com.google.tmdrb.testblog.service.TestService1;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -16,11 +13,6 @@ import java.util.HashMap;
 
 public class TestController {
 
-    @Autowired
-    TestService1 testService1;
-
-    @Autowired
-    UserRepo userRepo;
 
 
     @GetMapping("/http/get")
@@ -30,18 +22,23 @@ public class TestController {
         System.out.println(user);
         return "get요청";
     }
+    @PostMapping("http/post/board")
+    public String insertBoard(@RequestBody Board board){
+       return "insert board success" ;
+    }
+
     @PostMapping("/http/post")
     //post는 body에 데이터 전송한다.
     //body 타입에서 전송하는
     public String postTest(@RequestBody MUser user){
         System.out.println(user);
-        testService1.insert(user);
+
 
         return "post요청";
     }
     @PutMapping("/http/put")
     public String putTest(@RequestBody MUser user){
-        testService1.update(user);
+
 
         return "put요청";
     }

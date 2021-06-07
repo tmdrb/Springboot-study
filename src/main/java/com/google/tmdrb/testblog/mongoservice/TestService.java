@@ -1,20 +1,11 @@
-package com.google.tmdrb.testblog.service;
-import com.google.tmdrb.testblog.model.MUser;
+package com.google.tmdrb.testblog.mongoservice;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClientException;
 
-import java.util.List;
-import java.util.Optional;
-
+//mongotemplate 으로 만든 service
 @Service
 public class TestService {
-
+/*
     @Autowired
     private MongoTemplate mongoTemplate;
 
@@ -44,5 +35,5 @@ public class TestService {
 
         System.out.println("mongodb insert");
         return mongoTemplate.insert(body);
-    }
+    }*/
 }
