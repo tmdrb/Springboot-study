@@ -6,6 +6,9 @@ import lombok.*;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -17,14 +20,16 @@ import java.sql.Timestamp;
 
 
 
-@Entity //자동으로 mysql에 table 이 생성된다
-@Getter
-@Setter
-@NoArgsConstructor
+ //자동으로 mysql에 table 이 생성된다
+@Data
+@Builder
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
+//@DynamicInsert // null 값인 column 은 제거 시켜준다
+@Entity
 public class MUser {
-    enum ROLE{ADMIN,USER,MANAGER}
+
 
     //@GeneratedValue(strategy=GenerationType.IDENTITY) -> 프로젝트에서 연결된 db의 넘버링 전략을 따라간다.
 
@@ -42,9 +47,10 @@ public class MUser {
     @Column(length = 20)
     private String email;
 
-    @ColumnDefault("'USER'")
-    @Enumerated(value = EnumType.STRING)
-    private ROLE role;
+    //db 는 role type 이 없기 때문에 알려줘야 한다
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
 
     @CreationTimestamp //시간이 자동으로 입력된다.
     private Timestamp time;

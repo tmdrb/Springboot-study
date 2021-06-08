@@ -1,8 +1,6 @@
 package com.google.tmdrb.testblog.model;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -11,8 +9,9 @@ import java.util.List;
 
 @Entity
 @Data
-@Getter
-@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Reply {
 
     @Id
@@ -20,15 +19,19 @@ public class Reply {
     private  int reid;
 
     @ManyToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "boardid")
     private Board board;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name="userid")
     private MUser user;
 
     @Column(nullable = false, length = 30)
     private String content;
+
+    private int parent;
+
+    private int depth;
 
     @CreationTimestamp
     private Timestamp timestamp;
