@@ -1,5 +1,6 @@
 package com.google.tmdrb.testblog.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
@@ -15,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@JsonInclude(JsonInclude.Include.NON_NULL) // vo 에서 null 값이면 빼버리고 추가한다.
 public class Board {
 
     @Id

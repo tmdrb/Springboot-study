@@ -124,3 +124,29 @@ user라는 java object를 이해 할 수가 없다.
 spring boot 는 message converter 이 응답시에 자동으로 작동한다.
 자바 object를 리턴하게 되면 message converter가 Jackson 라이브러리를 호출해서
 user object를 json으로 변환해서 보내준다.
+
+06-10
+update 시 null 값인 필드는 그대로 두고 받은 값만 바ㅏ꾸기
+@DynamicInsert, @DynamicUpdate
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+json으로 결과 반환시 null 필드 빼고 전송
+
+postmapping 파라미터에 @RequestBody를 사용하면 application/json 타입으로 입력받겠다는 소리
+@RequestBody를 사용하지 않으면 form 타입으로 입력받겠다는 소리
+이규칙을 지켜주지 않으면 error
+
+jpa 영속성 context
+data 객체를 바로 db에 전송하는 것이 아닌 entitymanager 에 저장한다.
+entitymanager은 db로 전달 , entitymanager는 transaction 단위마다 수행하고 끝나면 종료한다.
+transaction begin() -> flush()//db로 엔티티매니저에 있는 엔티티와 sql을 넘겨준다. -> commit() db와 엔티티매니저 동기화
+
+그래서 save 를 하면 find를 먼저 수행하는데 db로 바로 찾아가는것이 아니라 영속성 context에 있나 확인후
+db에서 값을 찾는데 이때 값을 못찾으면 insert 를 찾으면 update 를 수행한다.
+jpa 는 트랜잭션이 끝나는 순간 스냅샷(가장 처음 영속된 값) 과 비교해서 변화가 생기면 저절로 update를 한다.
+이걸 dirty checking 이라고한다.
+이 과정에서 insert 에서는 @dynamicinsert 가 작동해서 null 값이 작성된 컬럼을 추가하지 않는다.
+근데 @dynamicupdate 는 제대로 동작하지 않는다.
+왜냐하면 entitymanager 에 있는 객체에서 null 을 새롭게 변경됬다고 인식 했기 때문에 null값이 주어진 컬럼도 변경하게된다.
+
+해결법 -> entitymanager 에 있는 entity를 불러와서 set으로 필요한부분만 바꿔준다.

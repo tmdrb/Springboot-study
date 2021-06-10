@@ -1,16 +1,15 @@
 package com.google.tmdrb.testblog.model;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.*;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
 import java.sql.Timestamp;
 
 
@@ -26,8 +25,9 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@DynamicUpdate
 //@DynamicInsert // null 값인 column 은 제거 시켜준다
-@Entity
+@Entity //entitymanager 에 인식할수 있다 @id로 구별
 public class MUser {
 
 
