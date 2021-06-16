@@ -1,4 +1,11 @@
 spring:
+
+  mvc:
+    static-path-pattern: /static/**
+
+  resource:
+    static-locations: classpath:/static/
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/blog?serverTimezone=UTC&characterEncoding=UTF-8
