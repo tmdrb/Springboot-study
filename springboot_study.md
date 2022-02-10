@@ -138,6 +138,115 @@ jar 파일로도 배포가 가능해 손쉽게 배포가 가능하다.
 
 spring 기반의 하위 프레임워크로 인증과 인가 보안을 담당한다.
 
+## 인증
+
+인증은 해당 사용자가 본인이 맞는지를 확인하는 절차이다.
+
+ex) id,password를 입력 했을 때 DB에 저장되어 있는 회원인지 아닌지 확인
+
+## 인가
+
+인증된 사용자가 요청한 자원에 접근 가능한지를 결정하는 절차이다.
+
+ex) id,password를 입력해서 로그인한 사용자의 권한을 확인해서 user인지 admin인지 확인하고 사용자가 요청한 자원이 권한에 맞게 접근가능하지 확인
+
+spring security는 filter 기반으로 동작하기 때문에 MVC와 분리되어서 동작한다.
+
+전통적인 spring security는 세션-쿠키 방식
+
+1. 유저가 로그인을 요청
+2. AuthenticationFilter 에서 DB 까지 이동
+3. DB에서 유저가 맞는지 확인후 UserDetails로 꺼내서 유저 session 생성
+4. SecurityContextHolder 에 session 저장
+5. 유저에게 Session id 응답
+6. 요청 쿠키에서 session id를 비교해서 Authentication 확인
+
+### 세션 방식의 문제점
+
+로그인 완료시 사용자에게 sessionid 를 전달하고 server는 sessionid를 저장한다(메모리,하드,db 등 저장공간에).
+
+인가 시 server가 직접 session을 가지고 있고 사용자의 쿠키를 받아서 session이 유효한지 비교한다. 
+
+하지만 이러한 방법은 server에 부하가 많이 생긴다.
+
+대규모 클라이언트들 이 있는 경우 session을 메모리에 저장 할 경우 메모리가 부족 할 것이고 서버가 재부팅되면 모든 session이 날라갈 것이다.
+
+하드디스크와 db에 저장 할 경우 읽어 들이는데 시간이 많이 걸린다.
+
+또한 서버를 여러대 두고 운용 할 경우 특정서버에만 session이 저장 되어 있어서 어떤 경우에는 인가 되고 안되고 하는 경우가 발생한다.
+
+### JWT 토큰
+
+JWT token은 session 방식을 개선하기 위해 나온 방식이다.
+
+json web token으로 인가방식에 더 가깝다.
+
+jwt는 server가 저장해야되는 정보가 존재 하지 않는다. 
+
+오로지 client가 관리한다.
+
+jwt는 base64방식으로 인코딩된 문자열이고 . 이 두개 존재한다.
+
+`eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c`
+
+. 을 기준으로 3개의 부분으로 나눈다.
+
+첫번째는 header, 두번째는 payload(data) (claim이라고도 불린다), 세번째는 서명 (첫번째 + 두번째 + server의 secret key를 인코딩한 값)이다.
+
+```
+//header 구조
+{
+  "alg": "HS256", // 세번째 값을 생성하는데 어떤 알고리즘을 사용할지 결정한다
+  "typ": "JWT" // jwt라고 알리는 고정값
+}
+
+//payload 구조
+
+//iss: 토큰 발급자 (issuer)
+//sub: 토큰 제목 (subject)
+//aud: 토큰 대상자 (audience)
+//exp: 토큰의 만료시간 (expiraton), 시간은 NumericDate 형식으로 되어있어야 하며 (예: 1480849147370) 언제나 현재 시간보다 이후로 설정되어있어야합니다.
+//nbf: Not Before 를 의미하며, 토큰의 활성 날짜와 비슷한 개념입니다. 여기에도 NumericDate 형식으로 날짜를 지정하며, 이 날짜가 지나기 전까지는 토큰이 처리되지 않습니다.
+//iat: 토큰이 발급된 시간 (issued at), 이 값을 사용하여 토큰의 age 가 얼마나 되었는지 판단 할 수 있습니다.
+//jti: JWT의 고유 식별자로서, 주로 중복적인 처리를 방지하기 위하여 사용됩니다. 일회용 토큰에 사용하면 유용합니다.
+
+{
+  "sub": "1234567890",
+  "name": "John Doe",
+  "iat": 1516239022
+}
+// 여기에는 누가 토큰을 발급했고 발급대상자 만료기간등 토큰의 정보가 담겨있다.
+
+```
+
+마지막 서명은 위의 값중 한부분이라도 달라지면 아예 다른 값이 나오기 때문에 유효성 검증으로 사용한다.
+
+jwt 방식은 server에 부하없이 사용 할 수 있다.
+
+하지만 client 부분에서 token을 관리하기 때문에 token이 누군가에게 탈취 당했을 경우 대응 할 수 없다.
+
+이런 방식을 해결하고자 access token, refresh token 두개를 발급한다.
+
+access token은 유효기간을 짧게 설정해서 언제든지 인가 될 수 있다.
+
+refresh token은 유효기간을 길게 설정해서 서버의 db에 저장한다.
+
+금방 만료한 access token은 refresh token이 다시 새로운 access token을 발급해준다.
+
+## OAuth2.0
+
+OAuth 방식은 현재 서버에서 사용자가 다른 서버(사용자의 정보가 있는 서버)에 요청한 정보를 안전하게 가져오는 방법이다.
+
+### resource owner(resource의 주인)
+### resource server(resource owner의 정보가 있는 서버, google, naver 같은)
+### client (resource가 없는 다른 서버)
+
+이전 방식은 client에서 resource owner의 id,pw를 직접 가지고 있어서 client에서 resource server로 요청해서 정보를 가져왔다.
+
+이 방식은 굉장히 위험 
+
+이 방식을 개선하고자 OAuth 방식이 나옴
+
 
 
 
