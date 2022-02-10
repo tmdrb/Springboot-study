@@ -247,7 +247,7 @@ OAuth 방식은 현재 서버에서 사용자가 다른 서버(사용자의 정�
 
 이 방식을 개선하고자 OAuth 방식이 나옴
 
-
+![Springboot-study](./img.png)
 
 
 
