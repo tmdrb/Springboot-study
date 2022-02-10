@@ -152,6 +152,8 @@ ex) id,password를 입력해서 로그인한 사용자의 권한을 확인해서
 
 spring security는 filter 기반으로 동작하기 때문에 MVC와 분리되어서 동작한다.
 
+![image](https://media.vlpt.us/images/jinjukim-dev/post/41c5a6ce-626e-443c-b817-a9e14263dc0f/F79C843E-48BA-4391-9848-46C2269C20A3.jpeg)
+
 전통적인 spring security는 세션-쿠키 방식
 
 1. 유저가 로그인을 요청
