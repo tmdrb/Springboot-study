@@ -75,5 +75,87 @@ RDBMS란 관계형 데이터베이스 이다.
 
 - 다대다 관계
 
+# JPA
+
+Java에서 개발한 ORM을 지원하는 인터페이스
+
+## ORM
+
+ORM은 db table과 객체를 맵핑 시켜주는 것
+
+기존에는 sql문으로 쿼리를 날려서 db에 접근했는데 Java의 객체로 db의 table을 맵핑 시켜서 메소드로 접근 가능
+
+![JPA](https://media.vlpt.us/images/ovan/post/0aeaac3c-3071-436b-9d42-779385831da2/spring-data-jpa.png)
+
+JPA는 애플리케이션과 JDBC 사이에서 동작
+
+개발자가 직접 JDBC에 접근 할 필요 없이 JPA를 사용하면 JPA 내부에서 JDBC API를 사용해서 db와 상호작용
+
+## Entity
+
+JPA에서 DB의 테이블과 같은 개념
+
+## Entity Manager
+
+Entity를 관리하는 역할
+
+![image](https://user-images.githubusercontent.com/31639082/153523730-697bbf73-4331-4673-9db0-511e2d1302de.png)
 
 
+## Persistence Context(영속성 컨텍스트)
+
+Entity를 영구적으로 저장하는 공간
+
+### Entity 생명주기
+
+![image](https://user-images.githubusercontent.com/31639082/153524261-e9a74f25-bd4f-4782-a6f2-3fd68be2fe7b.png)
+
+비영속 -> Entity 인스턴스를 막 생성했을 때 영속성 컨텍스트에 있지 않는다.
+
+영속 -> EntityManager를 통해서 데이터를 영속성 컨텍스트에 저장
+
+준영속 -> 원래 영속 상태였으나 영속성 컨텍스트에서 더이상 관리하지 않는 상태
+
+삭제 -> 영속성 컨텍스나, db에서 삭제 상태
+
+### 스냅샷
+
+JPA는 Entity를 영속성 컨텍스트에 보관 할 때 최초 상태를 복사해서 저장하는데 그것을 스냅샷 이라고 한다.
+
+### 1차 캐시
+
+영속성 컨텍스트에는 내부에 캐시가 있는데 이걸 1차 캐시로 부른다.
+
+1차 캐시의 키는 db의 기본키 이고 Entity 인스턴스를 값으로 가진다.
+
+조회가 있으면 먼저 1차 캐시에서 Entity를 찾고 있으면 여기서 바로 조회
+
+없으면 db로 조회 후 1차 캐시에 저장(Entity를 영속 상태로)후 Entity 리턴
+
+Entity는 비영속,영속,준영속,삭제 4가지 생명주기가 존재
+
+### transactional write-behind
+
+쓰기지연을 지원한다. 
+
+영속된 Entity들에 insert를 여러번 해도 각각 insert 되는 것이 아닌 하나의 트랜잭션이 commit 될 때 까지 대기 했다가 한번에 insert 쿼리를 db에 보낸다.
+
+### dirty checking
+
+영속성 컨텍스트에서 관리하고 있는 Entity들의 변화를 감지
+
+하나의 트랜잭션에서 Entity의 변화가 감지되면 트랜잭션에 끝나는 시점에 DB에 반영
+
+### flush
+
+flush는 영속성 컨텍스트의 변경 내용을 DB에 반영
+
+영속성 컨텍스트에 있는 Entity를 DB에 동기화 하는 개념
+
+![image](https://user-images.githubusercontent.com/31639082/153523680-6c6aadd5-b476-4165-af1d-39df5932701c.png)
+
+트랜잭션이 끝나고 commit을 하게 되면 1차 캐시와 스냅샷을 비교하게 된다.
+
+비교 후 달라진 점이 있다면 쓰기 지연 SQL 저장소에 update 쿼리를 저장한다.
+
+최종적으로 쓰기 지연 SQL 저장소에 있는 쿼리들을 flush 해서 db에 반영하고 commit 한다.
