@@ -1,16 +1,14 @@
 package com.google.tmdrb.testblog.service;
 
+import com.google.tmdrb.testblog.config.auth.PrincipalDetail;
 import com.google.tmdrb.testblog.model.MUser;
 import com.google.tmdrb.testblog.model.Role;
 import com.google.tmdrb.testblog.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
-
-import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
 
@@ -37,7 +35,7 @@ public class UserService {
         return snapshot;
     }
 
-    public MUser mkuser(MUser user){
+    public String mkuser(MUser user){
         MUser already = repository.findById(user.getUserid()).orElse(null);
 
         if(already == null){
@@ -45,15 +43,16 @@ public class UserService {
         user.setPassword(encPassword);
         user.setRole(Role.USER);
         MUser newUser = repository.save(user);
-        return newUser;}
+        return user.getUserid()+"님 회원가입 완료 됬습니다.";
+        }
         else {
-            return null;
+            return "이미 존재한는 id 입니다. 중복확인 바랍니다.";
         }
     }
 
-    public MUser login(){
-    return null;
+    public String delUser(PrincipalDetail principalDetail){
+        repository.deleteById(principalDetail.getUsername());
+        return "정상적으로 삭제";
     }
-
 
 }

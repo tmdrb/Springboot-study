@@ -1,10 +1,21 @@
 spring:
 
+  devtools:
+    livereload:
+      enable: true
+
+  thymeleaf:
+    cache: false
+    prefix: classpath:/views/
+    suffix: .html
+
   mvc:
     static-path-pattern: /static/**
 
+
+
   resource:
-    static-locations: classpath:/static/
+    static-locations: classpath:/resources/
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver

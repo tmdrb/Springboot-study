@@ -15,12 +15,8 @@ import java.sql.Timestamp;
 
 //table화 user 클래스가 mongo 에 자동으로 테이블이 생성된다
 
-
-
-
-
  //자동으로 mysql에 table 이 생성된다
-@Data
+@Data // getter setter 동시에 만들기 위해서는 data를 사용
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -32,8 +28,6 @@ public class MUser {
 
 
     //@GeneratedValue(strategy=GenerationType.IDENTITY) -> 프로젝트에서 연결된 db의 넘버링 전략을 따라간다.
-
-
     @Id
     @Column(nullable = false, length = 20)
     private String userid;

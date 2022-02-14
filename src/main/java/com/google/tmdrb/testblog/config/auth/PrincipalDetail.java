@@ -8,6 +8,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 
+//spring security 에서 로그인을 가로채고 난 뒤 완료가 되면 userdetails 타입의 오브젝트를
+//spring security session 저장소에 저장을 한다.
+//User type으로 저장 되는것이 아닌 userdetails type으로 저장되기 때문에
+//새로운 객체를 만들어야한다.
 public class PrincipalDetail implements UserDetails {
     private MUser user; //컴퍼지션 (객체를 품고 있는것)
 
@@ -15,6 +19,8 @@ public class PrincipalDetail implements UserDetails {
         this.user = user;
     }
 
+
+    // 인증받은 사용자 리스트 반환
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 

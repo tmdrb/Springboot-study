@@ -31,25 +31,36 @@ public class WebConfigure extends WebSecurityConfigurerAdapter {
 
         return new BCryptPasswordEncoder();
     }
-
+    //spring security 에서는 userid 가 db에서 있는지 확인하고
+    //password는 configure 에서 알아서 확인해준다.
+    //어떤방식으로 인코딩 했는지 알려주어야 한다.
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        //
         auth.userDetailsService(principalDetailService).passwordEncoder(encodePWD());
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/auth/**")
+        http.authorizeRequests().antMatchers("/user/mkuser","/board/main","/loginpage")
                     .permitAll()
+                    .antMatchers("/auth/**")
+                    .hasRole("ADMIN")
                     .anyRequest()
                     .authenticated()
                 .and()
                     .formLogin()
-                    .loginProcessingUrl("/auth/loginProc") // spring security 가 로그인을 가로채서 대신 해준다.
-                    .defaultSuccessUrl("/users")
+                    .loginPage("/loginpage")
+                    .loginProcessingUrl("/dologin") // spring security 가 로그인을 가로채서 대신 해준다
+                    .usernameParameter("id")
+                    .passwordParameter("pw")
+                    .defaultSuccessUrl("/board/main",true)
+                    .failureUrl("/loginfail")
                     .permitAll()
                 .and()
                     .logout()
+                    .logoutUrl("/dologout")
+                    .logoutSuccessUrl("/loginpage")
                 .and()
                     .csrf()
                     .disable();

@@ -24,7 +24,7 @@ dependencies {
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '2.5.1'
 
 
-
+	apply plugin: 'idea'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	implementation 'org.projectlombok:lombok'
@@ -32,6 +32,11 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	runtimeOnly 'mysql:mysql-connector-java'
+	implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
+	implementation 'javax.servlet:jstl'
+	implementation 'org.springframework.boot:spring-boot-devtools'
+	implementation group: 'org.webjars.bower', name: 'jquery', version: '3.5.1'
+
 }
 
 test {

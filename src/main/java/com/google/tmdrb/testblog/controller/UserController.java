@@ -18,6 +18,7 @@ import java.util.List;
 
 
 @RestController
+@RequestMapping("/user")
 public class UserController {
 
     @Autowired //의존성 주입
@@ -27,13 +28,11 @@ public class UserController {
     private UserService userService;
 
 
+    @GetMapping("/getall")
+    public List<MUser> getUsers(){
 
-    @GetMapping("/users")
-    public List<MUser> getUsers(@AuthenticationPrincipal PrincipalDetail principalDetail){
-        System.out.println(principalDetail.getUsername());
         return userRepository.findAll();
     }
-
 
 
     @GetMapping("/user/{id}")
@@ -44,25 +43,24 @@ public class UserController {
         MUser user =userRepository.findById(id).orElseThrow(()->new IllegalArgumentException("error"));
         return user;
     }
-    @PostMapping("/auth/mkuser")
-    public String makeUser(@RequestBody MUser user){
+    @PostMapping("/mkuser")
+    public String makeUser(MUser user){
         System.out.println(user);
 
-        if(userService.mkuser(user) != null)
-            return "make user success!!" ;
-        else
-            return "we have same id";
-    }
-    @PostMapping("/auth/login")
-    public String login(MUser user){
+        String message = userService.mkuser(user);
 
-        return "login sucess";
+        return message;
     }
 
-    @DeleteMapping("/deleteuser/{userid}")
-    public String deleteUser(@PathVariable String userid){
 
-        userRepository.deleteById(userid);
+    @DeleteMapping("/auth/deleteuser/{userid}")
+    public String deleteUser(@PathVariable String userid,@AuthenticationPrincipal PrincipalDetail principalDetail){
+        if(principalDetail != null) {
+            userService.delUser(principalDetail);
+
+
+        }
+
         return "delete complete!!";
     }
 
@@ -72,6 +70,7 @@ public class UserController {
 
         return userService.update(userid,user);
     }
+
 
 
 

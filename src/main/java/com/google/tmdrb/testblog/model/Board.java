@@ -1,5 +1,6 @@
 package com.google.tmdrb.testblog.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -36,9 +37,10 @@ public class Board {
     @JoinColumn(name = "userid") //field 값은 userid로 만들어진다.
     private MUser user; //db는 오브젝트 저장 할 수 없다. 그래서 fk 사용
 
-    @OneToMany(mappedBy = "board",fetch = FetchType.EAGER) //mappeby -> 연관관계의 주인이 아니다 라고 알린다
+    @OneToMany(mappedBy = "board",fetch = FetchType.EAGER,cascade = CascadeType.REMOVE) //mappeby -> 연관관계의 주인이 아니다 라고 알린다
     // fk를 생성하지 않고 db에 table을 추가 하지 말아라
     //onetomany 는 기본 fetch 전략이 lazy 전략이다 -> reply가 여러건이기 때문에 필요하면 들고오고 안필요하면 안들고 올게 전략
+    @JsonIgnoreProperties({"board"})
     private List<Reply> reply;
 
     @CreationTimestamp
