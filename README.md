@@ -12,13 +12,13 @@
 --------------------------------------------------------------------------
 02.14 
 
-- Spring Boot 프로젝트 생성 + 환경 설정 -> 
-- table 관계 생성 (User(pk=userid), Board(pk=boardid,fk=userid,fk=replyid), Reply(pk=replyid, fk=userid)) ->
-- 게시판에 필요한 Entity 생성(Board, User, Reply) -> 
-- Create 기능 구현 ->
-- Read 기능 구현 ->
-- Update 기능 구현 ->
-- Delete 기능 구현 -> 
+- Spring Boot 프로젝트 생성 + 환경 설정 -> o
+- table 관계 생성 (User(pk=userid), Board(pk=boardid,fk=userid,fk=replyid), Reply(pk=replyid, fk=userid)) -> o
+- 게시판에 필요한 Entity 생성(Board, User, Reply) -> o
+- Create 기능 구현 -> o (board, user)
+- Read 기능 구현 -> o (board, user)
+- Update 기능 구현 -> o (board, user)
+- Delete 기능 구현 -> o (board, user)
 
 --------------------------------------------------------------------------
 
