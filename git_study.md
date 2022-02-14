@@ -48,6 +48,12 @@ commit을 통해서 변경된 사항들이 실제 저장소에 반영되기전�
 
 이전에 내가 가지고 있던 작업과 Pull을 통해 가져온 작업은 Merge 된다.
 
+## Fetch
+
+원격 저장소에서 작업을 가져오고 로컬에 있는 이전의 작업과 Merge 하고 싶지 않을 때 사용
+
+Pull = Fetch + Merge
+
 # Git Flow
 
 ## Master 브랜치
