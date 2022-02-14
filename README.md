@@ -7,6 +7,20 @@
 - 대댓글
 - 조회수 
 
+### 프로젝트 진행 계획 
+
+02.14 
+
+- Spring Boot 프로젝트 생성 + 환경 설정 -> 
+- table 관계 생성 (User(pk=userid), Board(pk=boardid,fk=userid,fk=replyid), Reply(pk=replyid, fk=userid)) ->
+- 게시판에 필요한 Entity 생성(Board, User, Reply) -> 
+- Create 기능 구현 ->
+- Read 기능 구현 ->
+- Update 기능 구현 ->
+- Delete 기능 구현 -> 
+
+==========================================================================
+
 
 ## spring boot를 서버로 사용 (rest api 서버)
 
