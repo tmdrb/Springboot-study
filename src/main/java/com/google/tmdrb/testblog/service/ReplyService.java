@@ -32,7 +32,7 @@ public class ReplyService {
             Board board = boardRepository.findById(board_id).orElseThrow();
             reply.setUser(user);
             reply.setBoard(board);
-            board.getReply().add(reply);
+
             replyRepository.save(reply);
             return "success";
         }
@@ -40,11 +40,22 @@ public class ReplyService {
     }
 
     public String deleteReply(int reply_id,PrincipalDetail principalDetail){
-        return "";
-    }
+        Reply reply = replyRepository.findById(reply_id).orElseThrow();
+        if(principalDetail.getUsername().equals(reply.getUser().getUserid())){
 
+            replyRepository.delete(reply);
+            return "success";
+        }
+        return "fail";
+    }
+    @Transactional
     public String updateReply(int reply_id, Reply reply, PrincipalDetail principalDetail){
 
-        return "";
+        if(principalDetail.getUsername().equals(reply.getUser().getUserid())){
+            Reply old = replyRepository.findById(reply_id).orElseThrow();
+            old.setContent(reply.getContent());
+            return "success";
+        }
+        return "fail";
     }
 }

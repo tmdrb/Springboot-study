@@ -67,6 +67,7 @@ public class BoardService {
     @Transactional
     public Optional<BoardDetailDTO> readBoardDetail(int board_id){
         Board board = boardRepository.findById(board_id).orElseThrow(()->new IllegalArgumentException());
+        board.setCount(board.getCount()+1);
         List<SecurityReplyDTO> securityReplyDTOs = board.getReply().stream().map(reply -> SecurityReplyDTO.builder()
                 .id(reply.getReid())
                 .userid(reply.getUser().getUserid())

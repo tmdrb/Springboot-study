@@ -4,10 +4,23 @@ spring:
     livereload:
       enable: true
 
-  thymeleaf:
-    cache: false
-    prefix: classpath:/views/
-    suffix: .html
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            authorization-grant-type: authorization_code
+            scope: profile_nickname, account_email
+            client-id: a8b117c6a83d4c470135d900ad8f48a7
+            client-secret: 1jIerDMo725WOiIf1s3pOWoz84ejrlmD
+            redirect-uri: "http://localhost:8080/auth/kakao/callback"
+            client-authentication-method: POST
+        provider:
+          kakao:
+            authorization_uri: https://kauth.kakao.com/oauth/authorize
+            token_uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
 
   mvc:
     static-path-pattern: /static/**

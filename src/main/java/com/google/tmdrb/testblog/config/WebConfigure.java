@@ -1,5 +1,6 @@
 package com.google.tmdrb.testblog.config;
 
+import com.google.tmdrb.testblog.service.KakaoOauth;
 import com.google.tmdrb.testblog.service.PrincipalDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -26,6 +27,9 @@ public class WebConfigure extends WebSecurityConfigurerAdapter {
     @Autowired
     private PrincipalDetailService principalDetailService;
 
+    @Autowired
+    private KakaoOauth kakaoOauth;
+
     @Bean //ioc로 등록해서 스프링 컨테이너가 관리할수 있게
     public BCryptPasswordEncoder encodePWD(){
 
@@ -42,18 +46,17 @@ public class WebConfigure extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/user/mkuser","/board/main","/loginpage")
+        http.authorizeRequests().antMatchers("/user/mkuser","/board/main","/auth/kakao/callback")
                     .permitAll()
                     .antMatchers("/auth/**")
                     .hasRole("ADMIN")
                     .anyRequest()
                     .authenticated()
+
+
                 .and()
                     .formLogin()
-                    .loginPage("/loginpage")
-                    .loginProcessingUrl("/dologin") // spring security 가 로그인을 가로채서 대신 해준다
-                    .usernameParameter("id")
-                    .passwordParameter("pw")
+                    .loginProcessingUrl("/auth/dologin") // spring security 가 로그인을 가로채서 대신 해준다
                     .defaultSuccessUrl("/board/main",true)
                     .failureUrl("/loginfail")
                     .permitAll()
@@ -61,6 +64,12 @@ public class WebConfigure extends WebSecurityConfigurerAdapter {
                     .logout()
                     .logoutUrl("/dologout")
                     .logoutSuccessUrl("/loginpage")
+                .and()
+                    .oauth2Login()
+                        .userInfoEndpoint()
+                            .userService(kakaoOauth)
+                .and()
+                .defaultSuccessUrl("/board/main",false)
                 .and()
                     .csrf()
                     .disable();

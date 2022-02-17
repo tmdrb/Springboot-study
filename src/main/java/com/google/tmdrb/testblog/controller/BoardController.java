@@ -66,6 +66,25 @@ public class BoardController {
             return "fail";
     }
 
+    @DeleteMapping("/{board_id}/deletereply")
+    public String deleteReply(@PathVariable("board_id") int board_id,@AuthenticationPrincipal PrincipalDetail principalDetail){
+        String output = replyService.deleteReply(board_id,principalDetail);
+        if(output == "success")
+            return "complete";
+        else
+            return "fail";
+    }
+
+    @PutMapping("/{board_id}/updatereply")
+    public String updateReply(@PathVariable("board_id") int board_id,@RequestBody Reply reply,
+                              @AuthenticationPrincipal PrincipalDetail principalDetail){
+        String output = replyService.updateReply(board_id,reply,principalDetail);
+        if(output == "success")
+            return "complete";
+        else
+            return "fail";
+    }
+
     @PutMapping("/putboard/{board_id}")
     public String putBoard(@PathVariable("board_id") int board_id,@RequestBody Board board,@AuthenticationPrincipal PrincipalDetail principalDetail){
 
