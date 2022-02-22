@@ -106,6 +106,14 @@ ServletContext는 Servlet들이 공유하는 Context이다.
 
 ![image](https://user-images.githubusercontent.com/31639082/153130328-ebfb8f3c-d9a3-4bdb-8b50-9009cb01e377.png)
 
+## 프록시 패턴
+
+대리인을 하나 만들고 대리인이 대신 정보를 처리해주고 반환해준다.
+
+클라이언트가 요청한 서비스를 바로 실행하는 것 이 아니라 구현 기능을 인터페이스로 만들어 놓고 인터페이스를 implement 해서 서비스객체와 proxy객체를 두개 만든다.
+
+그 다음 클라이언트의 요청은 proxy객체로 들어가고 proxy객체 내에서 클라이언트가 실질적으로 요청한 서비스를 실행후 결과를 반환해준다.
+
 ## MVC 패턴
 
 웹에서 사용하는 패턴으로 Model, View, Controller 로 역할을 나눠서 만든다.
@@ -250,6 +258,37 @@ OAuth 방식은 현재 서버에서 사용자가 다른 서버(사용자의 정�
 이 방식을 개선하고자 OAuth 방식이 나옴
 
 ![image](https://media.vlpt.us/images/tmdwns1101/post/6ea313d8-9984-4d88-80fe-c085d0e9afc0/img.png)
+
+*OAuth를 사용하기 위한 config 설정
+
+- 인증 서버에 대한 설정(AuthServerConfig)
+
+AuthorizationServerConfigureAdapter 를 상속 받는다.
+
+configure 메소드는 ClientDetailServiceConfigurer를 인자로 받고 클라이언트 정보를 메모리에서 관리 할 지 아니면 db로 관리할지 설정가능
+
+또한 scope,권한 설정도 가능
+
+AuthorizationServerSecurityConfigurer
+
+토큰 엔드포인트에 대한 설정 가능
+
+- 리소스 서버에 대한 설정(ResourceServerConfig)
+
+OAuth token에 의해 보호되고 있는 자원 서버 설정
+
+ResourceServerConfigurerAdapter를 상속
+
+spring security filter 제공
+
+configure 함수는 인자로 HttpSecurity를 받고 접근 권한 설정가능
+
+- Security 설정(SecurityConfig)
+
+전반적인 Security 설정
+
+WebSecurityConfigureAdapter 상속
+
 
 
 ## AOP
