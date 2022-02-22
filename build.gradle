@@ -11,7 +11,11 @@ sourceCompatibility = '11'
 repositories {
 	mavenCentral()
 }
-
+configurations {
+	all {
+		exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+	}
+}
 dependencies {
 
 	//implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
@@ -23,6 +27,7 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '2.5.1'
 	implementation('org.springframework.boot:spring-boot-starter-oauth2-client')
+
 
 	apply plugin: 'idea'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -36,7 +41,10 @@ dependencies {
 	implementation 'javax.servlet:jstl'
 	implementation 'org.springframework.boot:spring-boot-devtools'
 	implementation group: 'org.webjars.bower', name: 'jquery', version: '3.5.1'
+	implementation 'org.springframework.boot:spring-boot-starter-log4j2'
+	implementation 'org.springframework.boot:spring-boot-starter-aop'
 
+	implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.10.3'   // log4j2
 }
 
 test {

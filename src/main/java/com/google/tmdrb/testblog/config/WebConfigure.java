@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -30,6 +32,13 @@ public class WebConfigure extends WebSecurityConfigurerAdapter {
     @Autowired
     private KakaoOauth kakaoOauth;
 
+    //override해서 bean으로 등록해야 사용가능
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
     @Bean //ioc로 등록해서 스프링 컨테이너가 관리할수 있게
     public BCryptPasswordEncoder encodePWD(){
 
@@ -46,7 +55,7 @@ public class WebConfigure extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/user/mkuser","/board/main","/auth/kakao/callback")
+        http.authorizeRequests().antMatchers("/user/mkuser","/board/main","/auth/kakao/callback","/auth/dologin")
                     .permitAll()
                     .antMatchers("/auth/**")
                     .hasRole("ADMIN")

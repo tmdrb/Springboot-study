@@ -35,6 +35,14 @@ public class UserService {
         return snapshot;
     }
 
+    public MUser haskakaouser(String userid){
+        MUser user = repository.findById(userid).orElseGet(()->{
+            return null;
+        });
+
+        return user;
+    }
+
     public String mkuser(MUser user){
         MUser already = repository.findById(user.getUserid()).orElse(null);
 
