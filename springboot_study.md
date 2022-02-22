@@ -252,4 +252,20 @@ OAuth 방식은 현재 서버에서 사용자가 다른 서버(사용자의 정�
 ![image](https://media.vlpt.us/images/tmdwns1101/post/6ea313d8-9984-4d88-80fe-c085d0e9afc0/img.png)
 
 
+## AOP
 
+어떤 로직을 기준으로 핵심적인 관점과 부가적인 관점으로 나누어서 생각하고 관점을 기준으로 각각 모듈화
+
+클래스 별로 공통된 기능을 하는 것들 끼리 모아서 Aspect로 모듈화 해서 사용
+
+- Aspect : 클래스 별로 흩어져 있는 관심사를 모듈화
+- Target : Aspect(모듈화)를 적용하는 곳 (클래스, 메소드)
+- Advice : 실질적으로 세부적인 기능을 담은 구현체
+- JointPoint : Advice가 적용될 위치 (메소드 호출, 생성자 호출 등 다양한 시점에 적용 가능)
+- PointCut : JointPoint를 상세하게 정의
+
+*스프링빈에만 AOP 적용 
+
+@Aspect
+
+@Around
